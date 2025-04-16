@@ -11,7 +11,7 @@ This is a Next.js project that provides an AI-powered calling system for busines
 - Shadcn UI
 - Radix UI
 - SCSS
-- Supabase (Database & Authentication)
+- Firebase (Database, Authentication, Storage & Functions)
 - Twilio (Phone Numbers & Call Handling)
 - OpenAI (Spam Classification)
 - Vapi/Retell (Voice AI Agents)
@@ -47,7 +47,7 @@ This is a Next.js project that provides an AI-powered calling system for busines
 - Node.js (v18 or higher)
 - pnpm package manager
 - Git
-- Supabase account
+- Firebase account
 - Twilio account
 - OpenAI API key
 - Vapi/Retell account
@@ -64,8 +64,12 @@ This is a Next.js project that provides an AI-powered calling system for busines
    ```
    Add your credentials to `.env.local`:
    ```
-   NEXT_PUBLIC_SUPABASE_URL=your-project-url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   NEXT_PUBLIC_FIREBASE_API_KEY=your-firebase-api-key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-firebase-auth-domain
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-firebase-project-id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-firebase-storage-bucket
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-firebase-messaging-sender-id
+   NEXT_PUBLIC_FIREBASE_APP_ID=your-firebase-app-id
    TWILIO_ACCOUNT_SID=your-twilio-sid
    TWILIO_AUTH_TOKEN=your-twilio-token
    OPENAI_API_KEY=your-openai-key
@@ -87,7 +91,7 @@ This is a Next.js project that provides an AI-powered calling system for busines
 │   └── numbers/        # Phone number management components
 ├── hooks/              # Custom React hooks
 ├── lib/                # Utility functions and configurations
-│   ├── supabase/      # Supabase client and utilities
+│   ├── firebase/      # Firebase client and utilities
 │   ├── twilio/        # Twilio integration
 │   ├── openai/        # OpenAI integration
 │   └── vapi/          # Vapi/Retell integration
@@ -96,50 +100,61 @@ This is a Next.js project that provides an AI-powered calling system for busines
 └── types/              # TypeScript type definitions
 ```
 
-## Database Schema
-```sql
--- Businesses table
-create table businesses (
-  id uuid primary key default uuid_generate_v4(),
-  name text not null,
-  owner_id uuid references auth.users(id),
-  created_at timestamp with time zone default timezone('utc'::text, now()),
-  business_hours jsonb,
-  notification_preferences jsonb
-);
-
--- Phone numbers table
-create table phone_numbers (
-  id uuid primary key default uuid_generate_v4(),
-  business_id uuid references businesses(id),
-  twilio_number text not null,
-  status text not null,
-  created_at timestamp with time zone default timezone('utc'::text, now())
-);
-
--- Leads table
-create table leads (
-  id uuid primary key default uuid_generate_v4(),
-  business_id uuid references businesses(id),
-  phone_number text not null,
-  name text,
-  email text,
-  notes text,
-  created_at timestamp with time zone default timezone('utc'::text, now())
-);
-
--- Calls table
-create table calls (
-  id uuid primary key default uuid_generate_v4(),
-  business_id uuid references businesses(id),
-  phone_number_id uuid references phone_numbers(id),
-  lead_id uuid references leads(id),
-  duration integer,
-  recording_url text,
-  transcription text,
-  is_spam boolean,
-  created_at timestamp with time zone default timezone('utc'::text, now())
-);
+## Firebase Structure
+```typescript
+// Collections
+interface FirebaseCollections {
+  businesses: {
+    [businessId: string]: {
+      name: string
+      ownerId: string
+      createdAt: Timestamp
+      businessHours: {
+        [day: string]: {
+          open: string
+          close: string
+        }
+      }
+      notificationPreferences: {
+        email: boolean
+        sms: boolean
+      }
+    }
+  }
+  
+  phoneNumbers: {
+    [numberId: string]: {
+      businessId: string
+      twilioNumber: string
+      status: 'active' | 'inactive'
+      createdAt: Timestamp
+    }
+  }
+  
+  leads: {
+    [leadId: string]: {
+      businessId: string
+      phoneNumber: string
+      name?: string
+      email?: string
+      notes?: string
+      createdAt: Timestamp
+    }
+  }
+  
+  calls: {
+    [callId: string]: {
+      businessId: string
+      phoneNumberId: string
+      leadId?: string
+      duration: number
+      recordingUrl?: string
+      transcription?: string
+      isSpam: boolean
+      createdAt: Timestamp
+    }
+  }
+}
 ```
 
 ## Development Guidelines
@@ -180,18 +195,25 @@ export function BusinessProfile({ businessId, onUpdate }: BusinessProfileProps) 
 - Use CSS variables for theming
 
 ### Integration Guidelines
-1. **Twilio Integration**
+1. **Firebase Integration**
+   - Set up Firestore collections
+   - Configure Firebase Authentication
+   - Set up Cloud Functions for webhooks
+   - Configure Firebase Storage for recordings
+   - Implement real-time listeners for call status
+
+2. **Twilio Integration**
    - Implement webhook handlers for call events
    - Set up number purchasing flow
    - Handle call forwarding logic
    - Implement call recording storage
 
-2. **OpenAI Integration**
+3. **OpenAI Integration**
    - Implement spam detection
    - Process call transcriptions
    - Generate call summaries
 
-3. **Vapi/Retell Integration**
+4. **Vapi/Retell Integration**
    - Set up AI agent configurations
    - Handle real-time call processing
    - Manage agent responses
@@ -208,7 +230,7 @@ export function BusinessProfile({ businessId, onUpdate }: BusinessProfileProps) 
 - Use dynamic imports for large components
 - Optimize images and assets
 - Implement proper caching strategies
-- Use Supabase's built-in caching mechanisms
+- Use Firebase's built-in caching mechanisms
 - Optimize call handling latency
 
 ### Testing
@@ -249,7 +271,7 @@ export function BusinessProfile({ businessId, onUpdate }: BusinessProfileProps) 
 
 4. **Security**
    - Implement proper authentication
-   - Use Row Level Security (RLS)
+   - Use Firebase Security Rules
    - Secure API keys
    - Implement proper data validation
    - Follow security best practices
@@ -262,7 +284,7 @@ export function BusinessProfile({ businessId, onUpdate }: BusinessProfileProps) 
    - Track call metrics
 
 ## Deployment
-1. Set up your Supabase project
+1. Set up your Firebase project
 2. Configure Twilio webhooks
 3. Set up Vapi/Retell integration
 4. Configure environment variables
@@ -280,7 +302,7 @@ export function BusinessProfile({ businessId, onUpdate }: BusinessProfileProps) 
 - Check for proper environment variables
 - Verify proper TypeScript configurations
 - Check for proper Next.js configurations
-- Verify Supabase connection and permissions
+- Verify Firebase connection and permissions
 - Check Twilio webhook configurations
 - Verify AI agent settings
 
@@ -296,7 +318,7 @@ export function BusinessProfile({ businessId, onUpdate }: BusinessProfileProps) 
 - [TypeScript Documentation](https://www.typescriptlang.org/docs)
 - [Shadcn UI Documentation](https://ui.shadcn.com)
 - [Radix UI Documentation](https://www.radix-ui.com)
-- [Supabase Documentation](https://supabase.com/docs)
+- [Firebase Documentation](https://firebase.google.com/docs)
 - [Twilio Documentation](https://www.twilio.com/docs)
 - [OpenAI Documentation](https://platform.openai.com/docs)
 - [Vapi Documentation](https://docs.vapi.ai)
