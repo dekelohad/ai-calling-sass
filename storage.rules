@@ -1,0 +1,34 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isBusinessOwner(businessId) {
+      return isAuthenticated() && 
+        firestore.exists(/databases/(default)/documents/businesses/$(businessId)) &&
+        firestore.get(/databases/(default)/documents/businesses/$(businessId)).data.ownerId == request.auth.uid;
+    }
+
+    // Call recordings
+    match /recordings/{businessId}/{callId} {
+      allow read: if isAuthenticated() && isBusinessOwner(businessId);
+      allow create: if isAuthenticated() && isBusinessOwner(businessId);
+      allow delete: if false; // Recordings should not be deletable
+    }
+
+    // Business profile images
+    match /profiles/{businessId} {
+      allow read: if isAuthenticated() && isBusinessOwner(businessId);
+      allow write: if isAuthenticated() && isBusinessOwner(businessId);
+    }
+
+    // Default deny
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+} 
