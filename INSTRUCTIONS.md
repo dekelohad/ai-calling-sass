@@ -1,4 +1,4 @@
-# AI Calling SASS Project Instructions
+# AI Calling SASS Project Documentation
 
 ## Project Overview
 This is a Next.js project that provides an AI-powered calling system for businesses. The system helps businesses never miss a call by using AI agents to handle calls when businesses are unavailable, collect lead information, and forward it to the business through SMS/email.
@@ -16,6 +16,147 @@ This is a Next.js project that provides an AI-powered calling system for busines
 - OpenAI (Spam Classification)
 - Vapi/Retell (Voice AI Agents)
 - pnpm (package manager)
+
+## Implementation Plan
+
+### Phase 1: Project Setup and Basic Infrastructure
+- [ ] Initialize Next.js project with TypeScript
+- [ ] Set up Tailwind CSS and SCSS
+- [ ] Configure Shadcn UI
+- [ ] Set up project structure
+- [ ] Create environment variables template
+- [ ] Set up Git repository
+- [ ] Configure ESLint and Prettier
+
+### Phase 2: Database and Authentication
+- [ ] Set up Firebase project
+- [ ] Create Firestore collections:
+  - [ ] Businesses
+  - [ ] Phone Numbers
+  - [ ] Leads
+  - [ ] Calls
+- [ ] Set up Firebase Security Rules
+- [ ] Configure Firebase Authentication
+- [ ] Create authentication components:
+  - [ ] Sign Up
+  - [ ] Sign In
+  - [ ] Password Reset
+  - [ ] Profile Management
+
+### Phase 3: Business Management
+- [ ] Create business profile components:
+  - [ ] Business Profile Form
+  - [ ] Business Hours Configuration
+  - [ ] Notification Preferences
+- [ ] Implement business dashboard:
+  - [ ] Overview statistics
+  - [ ] Recent calls
+  - [ ] Lead management
+- [ ] Set up business settings:
+  - [ ] Profile settings
+  - [ ] Notification settings
+  - [ ] Call handling preferences
+
+### Phase 4: Phone Number Management
+- [ ] Set up Twilio integration:
+  - [ ] Configure Twilio client
+  - [ ] Set up webhook endpoints
+  - [ ] Implement number purchasing
+- [ ] Create phone number components:
+  - [ ] Number search and purchase
+  - [ ] Number management dashboard
+  - [ ] Number status monitoring
+- [ ] Implement number settings:
+  - [ ] Call forwarding rules
+  - [ ] Business hours routing
+  - [ ] Voicemail settings
+
+### Phase 5: AI Call Handling
+- [ ] Set up Vapi/Retell integration:
+  - [ ] Configure AI agent
+  - [ ] Set up call handling
+  - [ ] Implement real-time processing
+- [ ] Create call handling components:
+  - [ ] Call dashboard
+  - [ ] Call recording player
+  - [ ] Transcription viewer
+- [ ] Implement OpenAI integration:
+  - [ ] Spam detection
+  - [ ] Call transcription
+  - [ ] Call summary generation
+
+### Phase 6: Lead Management
+- [ ] Create lead components:
+  - [ ] Lead capture form
+  - [ ] Lead dashboard
+  - [ ] Lead details view
+- [ ] Implement lead processing system:
+  - [ ] ChatGPT integration for spam detection
+  - [ ] Two-step verification process
+  - [ ] Spam pattern recognition
+  - [ ] Feedback loop for accuracy improvement
+- [ ] Implement lead notification system:
+  - [ ] Email notifications (for legitimate leads only)
+  - [ ] SMS notifications (for legitimate leads only)
+- [ ] Set up lead export functionality:
+  - [ ] CSV export
+  - [ ] PDF export
+- [ ] Implement spam detection customization:
+  - [ ] Business-specific spam criteria
+  - [ ] Manual review interface
+  - [ ] Spam detection analytics
+
+### Phase 7: Analytics and Reporting
+- [ ] Create analytics dashboard:
+  - [ ] Call statistics
+  - [ ] Lead conversion rates
+  - [ ] AI performance metrics
+- [ ] Implement reporting features:
+  - [ ] Custom report generation
+  - [ ] Scheduled reports
+  - [ ] Export functionality
+
+### Phase 8: Testing and Optimization
+- [ ] Write unit tests:
+  - [ ] Component tests
+  - [ ] Integration tests
+  - [ ] API tests
+- [ ] Performance optimization:
+  - [ ] Code splitting
+  - [ ] Image optimization
+  - [ ] API caching
+- [ ] Security audit:
+  - [ ] Authentication review
+  - [ ] API security
+  - [ ] Data protection
+
+### Phase 9: Deployment and Documentation
+- [ ] Set up production environment:
+  - [ ] Configure production database
+  - [ ] Set up production API keys
+  - [ ] Configure production webhooks
+- [ ] Create documentation:
+  - [ ] User guide
+  - [ ] API documentation
+  - [ ] Deployment guide
+- [ ] Deploy to production:
+  - [ ] Build optimization
+  - [ ] Environment configuration
+  - [ ] Final testing
+
+### Phase 10: Monitoring and Maintenance
+- [ ] Set up monitoring:
+  - [ ] Error tracking
+  - [ ] Performance monitoring
+  - [ ] Usage analytics
+- [ ] Create maintenance procedures:
+  - [ ] Backup procedures
+  - [ ] Update procedures
+  - [ ] Emergency procedures
+- [ ] Implement automated alerts:
+  - [ ] Error alerts
+  - [ ] Performance alerts
+  - [ ] Security alerts
 
 ## Core Features
 1. **Phone Number Management**
@@ -42,6 +183,77 @@ This is a Next.js project that provides an AI-powered calling system for busines
    - Lead notification system (SMS/Email)
    - Lead dashboard
    - Lead export functionality
+   - Spam detection and filtering
+   - Lead verification system
+   - Customizable spam criteria
+   - Manual review interface
+
+## Lead Processing and Spam Detection
+
+### Spam Detection System
+1. **ChatGPT Integration**
+   - Analyze lead information using ChatGPT
+   - Identify common spam patterns
+   - Detect suspicious contact information
+   - Recognize automated/bot behavior
+   - Flag inappropriate content
+
+2. **Two-Step Verification**
+   - Initial ChatGPT analysis
+   - Secondary verification for borderline cases
+   - Manual review option
+   - Business-specific criteria application
+
+3. **Spam Pattern Recognition**
+   - Irrelevant inquiries
+   - Suspicious contact details
+   - Automated behavior patterns
+   - Malicious content
+   - Inappropriate language
+
+4. **Feedback System**
+   - Store spam detection results
+   - Track false positives/negatives
+   - Improve detection accuracy
+   - Business feedback integration
+   - Pattern learning system
+
+5. **Customization Options**
+   - Business-specific criteria
+   - Custom spam patterns
+   - Notification preferences
+   - Review thresholds
+   - Automated actions
+
+### Lead Processing Flow
+1. **Initial Capture**
+   - Collect lead information
+   - Record call details
+   - Store raw data
+
+2. **Spam Analysis**
+   - Process with ChatGPT
+   - Apply business criteria
+   - Check against known patterns
+   - Generate confidence score
+
+3. **Verification**
+   - Automatic for high-confidence leads
+   - Manual review for borderline cases
+   - Business-specific rules application
+   - Final decision recording
+
+4. **Notification**
+   - Forward legitimate leads only
+   - Custom notification formats
+   - Priority-based delivery
+   - Delivery confirmation
+
+5. **Storage and Analytics**
+   - Store processed leads
+   - Track spam patterns
+   - Generate insights
+   - Update detection models
 
 ## Prerequisites
 - Node.js (v18 or higher)
@@ -322,4 +534,135 @@ export function BusinessProfile({ businessId, onUpdate }: BusinessProfileProps) 
 - [Twilio Documentation](https://www.twilio.com/docs)
 - [OpenAI Documentation](https://platform.openai.com/docs)
 - [Vapi Documentation](https://docs.vapi.ai)
-- [React Query Documentation](https://tanstack.com/query/latest) 
+- [React Query Documentation](https://tanstack.com/query/latest)
+
+## Current Status
+- Phase: Planning
+- Progress: 0%
+- Current Task: Project Setup
+
+## Next Steps
+1. Initialize Next.js project
+2. Set up basic infrastructure
+3. Begin Firebase setup
+
+## Notes
+- Each phase should be completed and tested before moving to the next
+- Regular backups should be maintained throughout development
+- Security reviews should be conducted at each phase
+- Documentation should be updated as features are completed 
+
+## Development Standards and Best Practices
+
+### Key Principles
+- Write concise, technical responses with accurate TypeScript examples
+- Use functional, declarative programming. Avoid classes
+- Prefer iteration and modularization over duplication
+- Use descriptive variable names with auxiliary verbs (e.g., isLoading)
+- Use lowercase with dashes for directories (e.g., components/auth-wizard)
+- Favor named exports for components
+- Use the Receive an Object, Return an Object (RORO) pattern
+
+### JavaScript/TypeScript Standards
+- Use "function" keyword for pure functions. Omit semicolons
+- Use TypeScript for all code. Prefer interfaces over types. Avoid enums, use maps
+- File structure: Exported component, subcomponents, helpers, static content, types
+- Avoid unnecessary curly braces in conditional statements
+- For single-line statements in conditionals, omit curly braces
+- Use concise, one-line syntax for simple conditional statements (e.g., if (condition) doSomething())
+
+### Error Handling
+- Handle errors and edge cases at the beginning of functions
+- Use early returns for error conditions to avoid deeply nested if statements
+- Place the happy path last in the function for improved readability
+- Avoid unnecessary else statements; use if-return pattern instead
+- Use guard clauses to handle preconditions and invalid states early
+- Implement proper error logging and user-friendly error messages
+- Consider using custom error types or error factories for consistent error handling
+
+### Next.js Best Practices
+- Use the App Router for modern Next.js applications
+- Implement server components where appropriate for better performance
+- Use client components only when necessary (interactivity, browser APIs)
+- Leverage Next.js data fetching methods (getServerSideProps, getStaticProps)
+- Implement proper loading states with loading.tsx files
+- Use error boundaries with error.tsx and global-error.tsx
+- Follow Next.js best practices for routing and navigation
+- Utilize Next.js Image component for optimized images
+- Implement proper metadata for SEO
+
+### React Best Practices
+- Use functional components and TypeScript interfaces
+- Use declarative JSX
+- Use function, not const, for components
+- Use Shadcn UI, Radix
+- Implement responsive design
+- Use mobile-first approach for responsive design using scss
+- Use dynamic loading for non-critical components
+- Use error boundaries for unexpected errors
+
+### Tailwind CSS Guidelines
+- Use Tailwind CSS utility classes for styling
+- Follow mobile-first responsive design principles
+- Use Tailwind's dark mode for theme switching
+- Leverage Tailwind's configuration for custom theming
+- Use @apply directive for reusable component styles
+- Implement responsive design using Tailwind's breakpoint utilities
+- Use Tailwind's state variants (hover, focus, active) for interactive elements
+
+### Integration Guidelines
+
+#### Firebase Integration
+- Use Firebase Authentication for user management
+- Implement Firestore for database operations with proper security rules
+- Utilize Firebase Storage for file uploads and media storage
+- Leverage Firebase Cloud Functions for serverless backend operations
+- Follow Firebase best practices for data modeling and security
+- Implement proper error handling for Firebase operations
+- Use Firebase SDK v9+ with modular imports for better tree-shaking
+- Consider using Firebase Emulators for local development and testing
+
+#### Twilio Integration
+- Follow the [Twilio documentation](https://www.twilio.com/docs) for proper integration
+- Use Twilio's SDK for voice, messaging, and video capabilities
+- Implement proper error handling for Twilio API calls
+- Use webhooks for handling incoming calls and messages
+- Follow Twilio's best practices for:
+  - Voice call handling and recording
+  - SMS messaging
+  - Video conferencing
+  - Phone number management
+  - Call forwarding and routing
+- Implement proper security measures for Twilio credentials
+- Use environment variables for storing Twilio API keys and tokens
+- Consider using Twilio's test credentials for development
+
+#### SendGrid Integration
+- Follow the [SendGrid documentation](https://docs.sendgrid.com/) for proper integration
+- Use SendGrid's API for sending transactional and marketing emails
+- Implement proper error handling for SendGrid API calls
+- Use SendGrid's templates for consistent email branding
+- Follow SendGrid's best practices for:
+  - Email deliverability optimization
+  - Template design and responsive layouts
+  - Email authentication (SPF, DKIM, DMARC)
+  - List management and segmentation
+  - Analytics and tracking
+- Implement proper security measures for SendGrid API keys
+- Use environment variables for storing SendGrid API keys
+- Consider using SendGrid's sandbox mode for testing
+- Implement rate limiting to avoid hitting API limits
+
+#### Retell AI Integration
+- Follow the [Retell AI documentation](https://docs.retellai.com/general/introduction) for proper integration
+- Implement the Retell AI SDK for voice agent capabilities
+- Use the Retell AI platform for building, testing, deploying, and monitoring AI phone agents
+- Leverage Retell's features for:
+  - Building sophisticated voice AI agents
+  - Testing agents in the playground
+  - Deploying to dedicated phone numbers
+  - Integrating with existing phone systems via SIP Trunking
+  - Scaling deployments with additional concurrency
+- Ensure proper error handling for Retell AI API calls and voice interactions
+- Implement webhooks for monitoring calls and post-call analysis
+- Follow Retell's best practices for prompt engineering and conversation flow design 
