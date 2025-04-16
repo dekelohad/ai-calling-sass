@@ -10,14 +10,14 @@
 - [ ] Configure ESLint and Prettier
 
 ## Phase 2: Database and Authentication
-- [ ] Set up Supabase project
-- [ ] Create database tables:
+- [ ] Set up Firebase project
+- [ ] Create Firestore collections:
   - [ ] Businesses
   - [ ] Phone Numbers
   - [ ] Leads
   - [ ] Calls
-- [ ] Set up Row Level Security (RLS)
-- [ ] Configure authentication with Supabase
+- [ ] Set up Firebase Security Rules
+- [ ] Configure Firebase Authentication
 - [ ] Create authentication components:
   - [ ] Sign Up
   - [ ] Sign In
@@ -138,7 +138,7 @@
 ## Next Steps
 1. Initialize Next.js project
 2. Set up basic infrastructure
-3. Begin database setup
+3. Begin Firebase setup
 
 ## Notes
 - Each phase should be completed and tested before moving to the next
