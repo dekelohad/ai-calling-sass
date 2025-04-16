@@ -1,10 +1,9 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import Link from "next/link"
-import { useAuth } from "@/lib/auth"
+import { useAuthStore } from "@/lib/store/auth-store"
 import { AuthLayout } from "@/components/auth-layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -13,29 +12,25 @@ import { Loader2 } from "lucide-react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function ForgotPasswordPage() {
-  const { resetPassword } = useAuth()
+  const { resetPassword, isLoading, error } = useAuthStore()
   const [email, setEmail] = useState("")
-  const [error, setError] = useState("")
+  const [formError, setFormError] = useState("")
   const [success, setSuccess] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
+    setFormError("")
     setSuccess("")
-    setIsLoading(true)
 
     try {
       const result = await resetPassword(email)
       if (result.success) {
         setSuccess(result.message || "Password reset link sent to your email")
       } else {
-        setError(result.message || "Failed to send reset link")
+        setFormError(result.message || "Failed to send reset link")
       }
     } catch (err) {
-      setError("An unexpected error occurred")
-    } finally {
-      setIsLoading(false)
+      setFormError("An unexpected error occurred")
     }
   }
 
@@ -72,7 +67,9 @@ export default function ForgotPasswordPage() {
             </div>
           </div>
 
-          {error && <div className="text-sm text-destructive">{error}</div>}
+          {(formError || error) && (
+            <div className="text-sm text-destructive">{formError || error}</div>
+          )}
 
           <div>
             <Button type="submit" className="w-full" disabled={isLoading}>

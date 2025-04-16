@@ -1,11 +1,10 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@/lib/auth"
+import { useAuthStore } from "@/lib/store/auth-store"
 import { AuthLayout } from "@/components/auth-layout"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,28 +13,24 @@ import { Loader2 } from "lucide-react"
 
 export default function LoginPage() {
   const router = useRouter()
-  const { login } = useAuth()
+  const { login, isLoading, error } = useAuthStore()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+  const [formError, setFormError] = useState("")
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
-    setIsLoading(true)
+    setFormError("")
 
     try {
       const result = await login(email, password)
       if (result.success) {
         router.push("/call-history")
       } else {
-        setError(result.message || "Failed to login")
+        setFormError(result.message || "Failed to login")
       }
     } catch (err) {
-      setError("An unexpected error occurred")
-    } finally {
-      setIsLoading(false)
+      setFormError("An unexpected error occurred")
     }
   }
 
@@ -84,7 +79,9 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {error && <div className="text-sm text-destructive">{error}</div>}
+        {(formError || error) && (
+          <div className="text-sm text-destructive">{formError || error}</div>
+        )}
 
         <div>
           <Button type="submit" className="w-full" disabled={isLoading}>
