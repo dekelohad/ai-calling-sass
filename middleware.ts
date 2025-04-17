@@ -6,8 +6,7 @@ const publicPaths = [
   '/auth/sign-in',
   '/auth/sign-up',
   '/auth/reset-password',
-  '/api/auth',
-  '/'
+  '/api/auth'
 ]
 
 export function middleware(request: NextRequest) {
@@ -15,20 +14,21 @@ export function middleware(request: NextRequest) {
   
   // Check if the path is public
   const isPublicPath = publicPaths.some(path => pathname.startsWith(path))
+  const isAuthPage = pathname.startsWith('/auth/')
   
   // Get the token from the cookies
   const token = request.cookies.get('auth-token')?.value
   
-  // Redirect to sign-in if accessing a protected route without a token
-  if (!isPublicPath && !token) {
+  // If trying to access auth pages while logged in, redirect to dashboard
+  if (isAuthPage && token) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
+  
+  // If trying to access protected routes without token, redirect to sign-in
+  if (!isPublicPath && !token && pathname !== '/') {
     const url = new URL('/auth/sign-in', request.url)
     url.searchParams.set('from', pathname)
     return NextResponse.redirect(url)
-  }
-  
-  // Redirect to dashboard if accessing auth pages with a token
-  if (isPublicPath && token && pathname !== '/') {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
   }
   
   return NextResponse.next()

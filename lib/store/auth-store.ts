@@ -3,7 +3,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { User } from 'firebase/auth'
-import { useFirebase } from '../firebase/FirebaseProvider'
+import { auth } from '../firebase/config'
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
@@ -38,7 +38,6 @@ export const useAuthStore = create<AuthState>()(
       setError: (error) => set({ error }),
       
       login: async (email, password) => {
-        const { auth } = useFirebase()
         set({ isLoading: true, error: null })
         
         try {
@@ -84,7 +83,6 @@ export const useAuthStore = create<AuthState>()(
       },
       
       register: async (name, email, password) => {
-        const { auth } = useFirebase()
         set({ isLoading: true, error: null })
         
         try {
@@ -114,7 +112,6 @@ export const useAuthStore = create<AuthState>()(
       },
       
       logout: async () => {
-        const { auth } = useFirebase()
         set({ isLoading: true, error: null })
         
         try {
@@ -130,7 +127,6 @@ export const useAuthStore = create<AuthState>()(
       },
       
       resetPassword: async (email) => {
-        const { auth } = useFirebase()
         set({ isLoading: true, error: null })
         
         try {
