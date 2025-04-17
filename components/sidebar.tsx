@@ -2,18 +2,23 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { BarChart3, Clock, CreditCard, HelpCircle, Key, Users, Database, Phone, PhoneCall } from "lucide-react"
+import { BarChart3, Clock, CreditCard, HelpCircle, Key, Users, Database, Phone, PhoneCall, Building2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { UserDropdown } from "@/components/user-dropdown"
-import { useAuth } from "@/lib/auth"
+import { useAuthStore } from "@/lib/store"
 import { Logo } from "@/components/logo"
 
 export function Sidebar() {
   const pathname = usePathname()
-  const { user } = useAuth()
+  const { user } = useAuthStore()
 
   const routes = [
+    {
+      name: "Business Profile",
+      path: "/dashboard/business",
+      icon: <Building2 className="h-5 w-5" />,
+    },
     {
       name: "Call History",
       path: "/call-history",

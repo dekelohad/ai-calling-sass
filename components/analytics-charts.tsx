@@ -1,7 +1,9 @@
+"use client"
+
 import { Card, CardContent } from "@/components/ui/card"
 import { BarChart3, Clock } from "lucide-react"
 import { ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendItem } from "@/components/ui/chart"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from "recharts"
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip as RechartsTooltip } from "recharts"
 
 // Mock data for charts
 const callCountsData = [
@@ -42,7 +44,7 @@ export function AnalyticsCharts() {
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <ChartTooltip
+                <RechartsTooltip
                   content={({ active, payload, label }) => {
                     if (active && payload && payload.length) {
                       return (
@@ -80,7 +82,7 @@ export function AnalyticsCharts() {
                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <ChartTooltip
+                <RechartsTooltip
                   content={({ active, payload, label }) => {
                     if (active && payload && payload.length) {
                       return (

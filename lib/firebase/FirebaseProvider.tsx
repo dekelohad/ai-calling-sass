@@ -1,10 +1,11 @@
 "use client"
 
-import { createContext, useContext, ReactNode } from 'react'
+import { createContext, useContext, ReactNode, useEffect } from 'react'
 import { Auth } from 'firebase/auth'
 import { Firestore } from 'firebase/firestore'
 import { FirebaseStorage } from 'firebase/storage'
 import { Functions } from 'firebase/functions'
+import { useAuthStore } from '@/lib/store/auth-store'
 
 interface FirebaseContextType {
   auth: Auth
@@ -30,6 +31,13 @@ export function FirebaseProvider({
   storage,
   functions
 }: FirebaseProviderProps) {
+  const initializeAuth = useAuthStore(state => state.initializeAuth)
+
+  useEffect(() => {
+    const unsubscribe = initializeAuth()
+    return () => unsubscribe()
+  }, [initializeAuth])
+
   return (
     <FirebaseContext.Provider value={{ auth, db, storage, functions }}>
       {children}

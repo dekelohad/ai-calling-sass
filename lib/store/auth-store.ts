@@ -9,10 +9,12 @@ import {
   createUserWithEmailAndPassword, 
   signOut, 
   sendPasswordResetEmail,
-  updateProfile
+  updateProfile,
+  onAuthStateChanged
 } from 'firebase/auth'
 
 interface UserData {
+  uid: string
   email: string
   name: string
 }
@@ -26,16 +28,41 @@ interface AuthState {
   logout: () => Promise<void>
   resetPassword: (email: string) => Promise<{ success: boolean; message?: string }>
   setError: (error: string | null) => void
+  initializeAuth: () => () => void
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
       user: null,
-      isLoading: false,
+      isLoading: true,
       error: null,
       
       setError: (error) => set({ error }),
+      
+      initializeAuth: () => {
+        const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+          if (firebaseUser) {
+            set({
+              user: {
+                uid: firebaseUser.uid,
+                email: firebaseUser.email || '',
+                name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || '',
+              },
+              isLoading: false,
+              error: null,
+            })
+          } else {
+            set({
+              user: null,
+              isLoading: false,
+              error: null,
+            })
+          }
+        })
+
+        return () => unsubscribe()
+      },
       
       login: async (email, password) => {
         set({ isLoading: true, error: null })
@@ -47,7 +74,7 @@ export const useAuthStore = create<AuthState>()(
           // Get user display name or use email as fallback
           const name = firebaseUser.displayName || email.split('@')[0]
           
-          const user = { email, name }
+          const user = { email, name, uid: firebaseUser.uid }
           set({ user, isLoading: false })
           
           // Set auth token in cookies for middleware
@@ -92,7 +119,7 @@ export const useAuthStore = create<AuthState>()(
           // Update the user's display name
           await updateProfile(firebaseUser, { displayName: name })
           
-          const user = { email, name }
+          const user = { email, name, uid: firebaseUser.uid }
           set({ user, isLoading: false })
           
           // Set auth token in cookies for middleware

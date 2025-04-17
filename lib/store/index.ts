@@ -1,8 +1,6 @@
-import { create } from 'zustand'
-import { createJSONStorage, persist } from 'zustand/middleware'
 import { useAuthStore } from './auth-store'
 import { useCallStore } from './call-store'
-import { useUserStore } from './user-store'
+import { useBusinessStore } from './business-store'
 
 // Export all stores
-export { useAuthStore, useCallStore, useUserStore } 
+export { useAuthStore, useCallStore, useBusinessStore } 

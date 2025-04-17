@@ -1,30 +1,38 @@
-import type React from "react"
-export const Chart = () => {
-  return null
+import * as React from "react"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+
+interface ChartTooltipProps {
+  content: React.ReactNode
+  children: React.ReactNode
 }
 
-export const ChartContainer = () => {
-  return null
-}
-
-export const ChartTooltip = () => {
-  return null
-}
-
-export const ChartTooltipContent = ({ children }: { children: React.ReactNode }) => {
+export function ChartTooltip({ content, children }: ChartTooltipProps) {
   return (
-    <div className="rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none">{children}</div>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>{children}</TooltipTrigger>
+        <TooltipContent>{content}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   )
 }
 
-export const ChartLegend = ({ children }: { children: React.ReactNode }) => {
+export function ChartTooltipContent({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none">
+      {children}
+    </div>
+  )
+}
+
+export function ChartLegend({ children }: { children: React.ReactNode }) {
   return <div className="flex items-center gap-2">{children}</div>
 }
 
-export const ChartLegendItem = ({ color, label }: { color: string; label: string }) => {
+export function ChartLegendItem({ color, label }: { color: string; label: string }) {
   return (
     <div className="flex items-center gap-1">
-      <div className={`h-2 w-2 rounded-full`} style={{ backgroundColor: color }} />
+      <div className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
       <span>{label}</span>
     </div>
   )
