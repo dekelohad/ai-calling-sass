@@ -7,52 +7,52 @@ service cloud.firestore {
       return request.auth != null;
     }
     
-    function isOwner(userId) {
-      return request.auth.uid == userId;
-    }
-    
-    function isBusinessOwner(businessId) {
+    function isOwner(businessId) {
       return isAuthenticated() && 
         exists(/databases/$(database)/documents/businesses/$(businessId)) &&
         get(/databases/$(database)/documents/businesses/$(businessId)).data.ownerId == request.auth.uid;
     }
-
-    // Businesses collection
+    
+    // Business rules
     match /businesses/{businessId} {
-      allow read: if isAuthenticated() && isBusinessOwner(businessId);
-      allow create: if isAuthenticated();
-      allow update, delete: if isAuthenticated() && isBusinessOwner(businessId);
+      allow read: if isAuthenticated() && (
+        resource.data.ownerId == request.auth.uid
+      );
+      allow create: if isAuthenticated() && (
+        request.resource.data.ownerId == request.auth.uid &&
+        request.resource.data.createdAt == request.time
+      );
+      allow update: if isAuthenticated() && (
+        resource.data.ownerId == request.auth.uid &&
+        request.resource.data.ownerId == request.auth.uid
+      );
+      allow delete: if isAuthenticated() && (
+        resource.data.ownerId == request.auth.uid
+      );
     }
-
-    // Phone Numbers collection
-    match /phoneNumbers/{numberId} {
-      allow read: if isAuthenticated() && 
-        isBusinessOwner(resource.data.businessId);
-      allow create: if isAuthenticated() && 
-        isBusinessOwner(request.resource.data.businessId);
-      allow update, delete: if isAuthenticated() && 
-        isBusinessOwner(resource.data.businessId);
+    
+    // Phone number rules
+    match /phoneNumbers/{phoneId} {
+      allow read: if isAuthenticated() && isOwner(resource.data.businessId);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.businessId);
+      allow update: if isAuthenticated() && isOwner(resource.data.businessId);
+      allow delete: if isAuthenticated() && isOwner(resource.data.businessId);
     }
-
-    // Leads collection
+    
+    // Lead rules
     match /leads/{leadId} {
-      allow read: if isAuthenticated() && 
-        isBusinessOwner(resource.data.businessId);
-      allow create: if isAuthenticated() && 
-        isBusinessOwner(request.resource.data.businessId);
-      allow update, delete: if isAuthenticated() && 
-        isBusinessOwner(resource.data.businessId);
+      allow read: if isAuthenticated() && isOwner(resource.data.businessId);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.businessId);
+      allow update: if isAuthenticated() && isOwner(resource.data.businessId);
+      allow delete: if isAuthenticated() && isOwner(resource.data.businessId);
     }
-
-    // Calls collection
+    
+    // Call rules
     match /calls/{callId} {
-      allow read: if isAuthenticated() && 
-        isBusinessOwner(resource.data.businessId);
-      allow create: if isAuthenticated() && 
-        isBusinessOwner(request.resource.data.businessId);
-      allow update: if isAuthenticated() && 
-        isBusinessOwner(resource.data.businessId);
-      allow delete: if false; // Calls should not be deletable
+      allow read: if isAuthenticated() && isOwner(resource.data.businessId);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.businessId);
+      allow update: if isAuthenticated() && isOwner(resource.data.businessId);
+      allow delete: if isAuthenticated() && isOwner(resource.data.businessId);
     }
   }
 } 
