@@ -30,18 +30,18 @@ This is a Next.js project that provides an AI-powered calling system for busines
 
 ### Phase 2: Database and Authentication
 - [x] Set up Firebase project
-- [ ] Create Firestore collections:
-  - [ ] Businesses
-  - [ ] Phone Numbers
-  - [ ] Leads
-  - [ ] Calls
-- [ ] Set up Firebase Security Rules
-- [ ] Configure Firebase Authentication
-- [ ] Create authentication components:
-  - [ ] Sign Up
-  - [ ] Sign In
-  - [ ] Password Reset
-  - [ ] Profile Management
+- [x] Create Firestore collections (Complex task - Completed):
+  - [x] Businesses (with business hours and notification preferences)
+  - [x] Phone Numbers (with Twilio integration)
+  - [x] Leads (with spam detection)
+  - [x] Calls (with recording and transcription)
+- [x] Set up Firebase Security Rules
+- [x] Configure Firebase Authentication
+- [x] Create authentication components:
+  - [x] Sign Up (with validation and error handling)
+  - [x] Sign In (with error handling and loading states)
+  - [x] Password Reset (with success states)
+  - [x] Profile Management (via auth store)
 
 ### Phase 3: Business Management
 - [ ] Create business profile components:
